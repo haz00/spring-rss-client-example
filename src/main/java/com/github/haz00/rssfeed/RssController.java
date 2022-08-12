@@ -32,18 +32,16 @@ public class RssController {
 
     @PostMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable Long id) {
-        if (id < 0)
-            throw new ApiException("bad id: " + id);
-        // TODO async
-        service.update(id);
-        return ResponseEntity.ok(null);
+        if (id < 0) throw new ApiException("bad id: " + id);
+
+        service.updateAsync(id);
+        return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/update")
     public ResponseEntity<?> updateAll() throws Throwable {
-        // TODO async
-        service.updateAll();
-        return ResponseEntity.ok(null);
+        service.updateAllAsync();
+        return ResponseEntity.accepted().build();
     }
 
     @Autowired

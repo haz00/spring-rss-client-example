@@ -20,7 +20,7 @@ public class Rss {
     @Column(length = 512)
     private String lastUpdateMessage;
 
-    @OneToMany(mappedBy = "rss", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "rss", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Article> items;
 
     public Rss() {
