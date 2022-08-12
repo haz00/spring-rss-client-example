@@ -5,7 +5,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RssRepository extends JpaRepository<RssEntity, Long> {
+public interface RssRepository extends JpaRepository<Rss, Long> {
 
-    RssEntity findByUrl(@Param("url") String url);
+    Rss findByUrl(@Param("url") String url);
 }

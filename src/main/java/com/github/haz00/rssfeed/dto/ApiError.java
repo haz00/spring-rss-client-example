@@ -2,15 +2,15 @@ package com.github.haz00.rssfeed.dto;
 
 import lombok.Data;
 
-import java.util.List;
+import java.io.Serializable;
 
 @Data
-public class ApiError {
-    private List<String> messages;
+public class ApiError implements Serializable {
+    private String message;
 
-    public static ApiError of(String...messages) {
+    public static ApiError of(String message) {
         ApiError e = new ApiError();
-        e.setMessages(List.of(messages));
+        e.setMessage(message);
         return e;
     }
 }

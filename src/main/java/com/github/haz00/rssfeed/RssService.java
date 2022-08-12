@@ -22,27 +22,27 @@ public class RssService {
     private RssRepository repository;
     private RssReader reader;
 
-    public RssEntity addRss(String url) {
+    public Rss createByUrl(String url) {
         requireNonNull(url);
 
-        RssEntity exist = repository.findByUrl(url);
+        Rss exist = repository.findByUrl(url);
 
         if (exist != null)
-            throw new IllegalStateException("URL already exists: " + url);
+            throw new ApiException("URL already exists: " + url);
 
-        RssEntity newRss = new RssEntity();
+        Rss newRss = new Rss();
         newRss.setUrl(url);
 
         log.info("add rss {}", newRss);
         return repository.save(newRss);
     }
 
-    public RssEntity getRss(Long id) {
+    public Rss getRss(Long id) {
         requireNonNull(id);
         return repository.findById(id).orElseThrow();
     }
 
-    public List<RssEntity> getAllRss() {
+    public List<Rss> getAllRss() {
         return repository.findAll();
     }
 
@@ -52,24 +52,24 @@ public class RssService {
         repository.deleteById(id);
     }
 
-    public void updateFeed(Long id) throws Throwable {
-        Optional<RssEntity> found = repository.findById(id);
+    public void update(Long id) {
+        Optional<Rss> found = repository.findById(id);
 
         if (found.isEmpty())
-            throw new IllegalStateException("RSS not found: " + id);
+            throw new ApiException("RSS not found: " + id);
 
         // TODO async
-        updateFeed(found.get());
+        update(found.get());
     }
 
-    public void updateFeeds() throws Throwable {
+    public void updateAll() {
         log.info("update feeds");
-        for (RssEntity s : repository.findAll()) {
-            updateFeed(s);
+        for (Rss s : repository.findAll()) {
+            update(s);
         }
     }
 
-    protected void updateFeed(RssEntity entity) throws Throwable {
+    protected void update(Rss entity) {
         Objects.requireNonNull(entity);
 
         log.info("update feed {}", entity.getId());
@@ -77,20 +77,21 @@ public class RssService {
         try {
             for (Item dto : reader.read(entity.getUrl()).toList()) {
 
-                ItemEntity item = mapToEntity(dto, entity);
+                Article article = itemToArticle(dto, entity);
 
                 // add new only
                 // TODO optimize
                 boolean contains = false;
-                for (ItemEntity exist : entity.getItems()) {
-                    if (Objects.equals(exist.getGuid(), item.getGuid())) {
+                for (Article exist : entity.getItems()) {
+                    if (Objects.equals(exist.getGuid(), article.getGuid())) {
+                        // TODO update
                         contains = true;
                         break;
                     }
                 }
 
                 if (!contains)
-                    entity.getItems().add(item);
+                    entity.getItems().add(article);
             }
 
             entity.setLastUpdateMessage(null);
@@ -103,21 +104,21 @@ public class RssService {
         repository.save(entity);
     }
 
-    protected ItemEntity mapToEntity(Item item, RssEntity entity) {
-        ItemEntity e = new ItemEntity();
-        e.setOwner(entity);
-        e.setGuid(item.getGuid().orElseThrow(() -> new IllegalStateException("Item must have GUID: " + entity.getUrl())));
-        e.setLink(item.getLink().orElse(null));
-        e.setDescription(item.getDescription().orElse(null));
-        e.setTitle(item.getTitle().orElse(null));
+    protected Article itemToArticle(Item item, Rss entity) {
+        Article a = new Article();
+        a.setRss(entity);
+        a.setGuid(item.getGuid().orElseThrow(() -> new IllegalStateException("Item must have GUID: " + entity.getUrl())));
+        a.setLink(item.getLink().orElse(null));
+        a.setDescription(item.getDescription().orElse(null));
+        a.setTitle(item.getTitle().orElse(null));
         if (item.getPubDate().isPresent()) {
             try {
-                LocalDateTime date = LocalDateTime.parse(item.getPubDate().get(), DateTimeFormatter.RFC_1123_DATE_TIME);
-                e.setPubDate(date);
+                String raw = item.getPubDate().get();
+                a.setPubDate(LocalDateTime.parse(raw, DateTimeFormatter.RFC_1123_DATE_TIME));
             } catch (DateTimeParseException ignore) {
             }
         }
-        return e;
+        return a;
     }
 
     @Autowired

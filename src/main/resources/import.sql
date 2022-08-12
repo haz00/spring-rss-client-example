@@ -1,1 +1,1 @@
-INSERT INTO RSS VALUES(0, null, 'https://lorem-rss.herokuapp.com/feed');
+INSERT INTO RSS(`id`, `url`, `last_update_message`) VALUES(0, 'https://lorem-rss.herokuapp.com/feed', null);

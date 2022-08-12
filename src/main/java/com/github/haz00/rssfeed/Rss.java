@@ -1,7 +1,5 @@
 package com.github.haz00.rssfeed;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,7 +8,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "rss")
-public class RssEntity {
+public class Rss {
 
     @Id
     @GeneratedValue
@@ -19,13 +17,13 @@ public class RssEntity {
     @Column(unique = true, nullable = false)
     private String url;
 
+    @Column(length = 512)
     private String lastUpdateMessage;
 
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = ItemEntity.class)
-    private List<ItemEntity> items;
+    @OneToMany(mappedBy = "rss", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Article> items;
 
-    public RssEntity() {
+    public Rss() {
     }
 
     @Override

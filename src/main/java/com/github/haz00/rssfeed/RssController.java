@@ -1,7 +1,7 @@
 package com.github.haz00.rssfeed;
 
 import com.github.haz00.rssfeed.dto.AddRssRequest;
-import com.github.haz00.rssfeed.dto.ApiError;
+import com.github.haz00.rssfeed.dto.RssDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,43 +11,39 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/feed")
+@RequestMapping("/api/rss")
 public class RssController {
 
     private RssService service;
 
     @PostMapping
-    public ResponseEntity<?> addFeed(@RequestBody AddRssRequest data) {
-        RssEntity added = service.addRss(data.getUrl());
-        return ResponseEntity.ok(added);
-    }
+    public ResponseEntity<RssDto> add(@RequestBody AddRssRequest data) {
+        if (data.getUrl() == null || data.getUrl().isBlank())
+            throw new ApiException("bad url: " + data.getUrl());
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RssEntity> getFeed(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getRss(id));
+        Rss added = service.createByUrl(data.getUrl());
+        return ResponseEntity.ok(RssDto.fromEntity(added));
     }
 
     @GetMapping
-    public ResponseEntity<List<RssEntity>> getFeeds() {
-        return ResponseEntity.ok(service.getAllRss());
+    public ResponseEntity<List<RssDto>> all() {
+        return ResponseEntity.ok(RssDto.fromEntity(service.getAllRss()));
     }
 
-    @PostMapping("/update/{url}")
-    public ResponseEntity<?> updateFeed(@PathVariable Long id) throws Throwable {
-        service.updateFeed(id);
+    @PostMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id) {
+        if (id < 0)
+            throw new ApiException("bad id: " + id);
+        // TODO async
+        service.update(id);
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateFeeds() throws Throwable {
-        service.updateFeeds();
+    public ResponseEntity<?> updateAll() throws Throwable {
+        // TODO async
+        service.updateAll();
         return ResponseEntity.ok(null);
-    }
-
-    @ExceptionHandler(Throwable.class)
-    public ResponseEntity<ApiError> exceptionHandler(Throwable e) {
-        log.error(e.getMessage(), e);
-        return ResponseEntity.badRequest().body(ApiError.of(e.getMessage()));
     }
 
     @Autowired
