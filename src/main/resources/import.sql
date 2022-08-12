@@ -1,0 +1,1 @@
+INSERT INTO RSS VALUES(0, null, 'https://lorem-rss.herokuapp.com/feed');
