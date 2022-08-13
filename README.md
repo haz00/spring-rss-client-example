@@ -1,6 +1,6 @@
 # What is this?
 A simple Spring Boot driven proof-of-concept implementation of RSS client.
-It was made for educational and demonstration purposes.
+It was made for educational and demonstration purposes. This app can manage RSS channels (CRUD), update them in asynchronously way and show articles entries data (feed).
 
 Tested on RSS feed: https://lorem-rss.herokuapp.com/
 
