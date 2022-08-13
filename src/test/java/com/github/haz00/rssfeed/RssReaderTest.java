@@ -29,7 +29,7 @@ public class RssReaderTest {
             assertEquals(of("http://example.com/test/1660212060"), first.getLink());
             assertEquals(of("http://example.com/test/1660212060"), first.getGuid());
             assertEquals(of(true), first.getIsPermaLink());
-//            assertEquals(of("John Smith"), first.getAuthor()); FIXME no `creator` field
+//            assertEquals(of("John Smith"), first.getAuthor()); FIXME library has no `creator` field
             assertEquals(of("Thu, 11 Aug 2022 10:01:00 GMT"), first.getPubDate());
         }
     }

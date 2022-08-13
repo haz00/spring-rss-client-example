@@ -21,7 +21,7 @@ public class RssController {
         if (data.getUrl() == null || data.getUrl().isBlank())
             throw new ApiException("bad url: " + data.getUrl());
 
-        Rss added = service.createByUrl(data.getUrl());
+        Rss added = service.createWithUrl(data.getUrl());
         return ResponseEntity.ok(RssDto.fromEntity(added));
     }
 

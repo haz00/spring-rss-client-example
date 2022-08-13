@@ -2,6 +2,7 @@ package com.github.haz00.rssfeed;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +25,8 @@ public class RssService {
         updateAllAsync();
     }
 
-    public Rss createByUrl(String url) {
+    public Rss createWithUrl(String url) {
         requireNonNull(url);
-
-        Rss exist = repository.findByUrl(url);
-
-        if (exist != null)
-            throw new ApiException("URL already exists: " + url);
 
         Rss newRss = new Rss();
         newRss.setUrl(url);
@@ -39,9 +35,10 @@ public class RssService {
         return repository.save(newRss);
     }
 
+    @Nullable
     public Rss getRss(Long id) {
         requireNonNull(id);
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElse(null);
     }
 
     public List<Rss> getAllRss() {

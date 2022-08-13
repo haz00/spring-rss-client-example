@@ -1,11 +1,15 @@
 package com.github.haz00.rssfeed;
 
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
 @Table(name = "rss")
 public class Rss {
@@ -14,17 +18,15 @@ public class Rss {
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String url;
 
     @Column(length = 512)
     private String lastUpdateMessage;
 
     @OneToMany(mappedBy = "rss", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<Article> items;
-
-    public Rss() {
-    }
 
     @Override
     public String toString() {
@@ -33,5 +35,18 @@ public class Rss {
                 ", url='" + url + '\'' +
                 ", lastUpdateMessage='" + lastUpdateMessage + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Rss rss = (Rss) o;
+        return id != null && Objects.equals(id, rss.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
