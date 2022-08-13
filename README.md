@@ -30,4 +30,4 @@ The project uses:
 ## How to run
 - `git clone https://github.com/haz00/spring-rss-client-example.git`
 - `cd spring-rss-client-example`
-- `mvn run`
+- `./mvnw spring-boot:run`
