@@ -39,9 +39,16 @@ public class RssController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateAll() throws Throwable {
+    public ResponseEntity<?> updateAll() {
         service.updateAllAsync();
         return ResponseEntity.accepted().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> remove(@PathVariable Long id) {
+        if (id < 0) throw new ApiException("bad id: " + id);
+        service.removeRss(id);
+        return ResponseEntity.ok().build();
     }
 
     @Autowired

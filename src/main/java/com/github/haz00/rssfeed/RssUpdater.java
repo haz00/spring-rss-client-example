@@ -12,11 +12,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.Future;
 
 /**
- * Proxy class, that makes possible to spawn thread on each update() call within one service
+ * A proxy class, that makes possible to spawn a thread on each update() call within the same service
  */
 @Slf4j
 public class RssUpdater {
