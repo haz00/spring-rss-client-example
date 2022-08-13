@@ -18,7 +18,7 @@ public class RssController {
 
     @PostMapping
     public ResponseEntity<RssDto> add(@RequestBody AddRssRequest data) {
-        if (data.getUrl() == null || data.getUrl().isBlank())
+        if (data.getUrl() == null || data.getUrl().trim().isEmpty())
             throw new ApiException("bad url: " + data.getUrl());
 
         Rss added = service.createWithUrl(data.getUrl());
