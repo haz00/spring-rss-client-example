@@ -5,7 +5,9 @@ import com.apptasticsoftware.rssreader.RssReader;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Optional.of;
@@ -15,10 +17,10 @@ public class RssReaderTest {
 
     @Test
     public void read() throws IOException {
-        try (var src = RssReaderTest.class.getResourceAsStream("/feed")) {
+        try (InputStream src = RssReaderTest.class.getResourceAsStream("/feed")) {
             RssReader reader = new RssReader();
             Stream<Item> rssFeed = reader.read(src);
-            List<Item> articles = rssFeed.toList();
+            List<Item> articles = rssFeed.collect(Collectors.toList());
 
             assertEquals(10, articles.size());
 

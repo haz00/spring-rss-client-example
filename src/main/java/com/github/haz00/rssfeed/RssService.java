@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
@@ -60,7 +61,7 @@ public class RssService {
 
         return repository.findAll().stream()
                 .map(rss -> updater.updateAsync(rss.getId()))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Autowired

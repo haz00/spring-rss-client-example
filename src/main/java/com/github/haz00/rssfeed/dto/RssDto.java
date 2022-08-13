@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class RssDto implements Serializable {
@@ -21,6 +22,6 @@ public class RssDto implements Serializable {
     public static List<RssDto> fromEntity(List<Rss> entities) {
         return entities.stream()
                 .map(RssDto::fromEntity)
-                .toList();
+                .collect(Collectors.toList());
     }
 }

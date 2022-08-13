@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 public class FeedService {
 
@@ -18,7 +20,7 @@ public class FeedService {
         return FeedPage.builder()
                 .page(page)
                 .total(articles.getTotalPages())
-                .articles(articles.stream().toList())
+                .articles(articles.stream().collect(Collectors.toList()))
                 .build();
     }
 

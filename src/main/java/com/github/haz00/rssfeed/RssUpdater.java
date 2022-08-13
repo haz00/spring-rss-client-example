@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * A proxy class, that makes possible to spawn a thread on each update() call within the same service
@@ -35,7 +36,7 @@ public class RssUpdater {
 
         try {
 //            Thread.sleep(2000);
-            for (Item dto : reader.read(rss.getUrl()).toList()) {
+            for (Item dto : reader.read(rss.getUrl()).collect(Collectors.toList())) {
 
                 Article article = itemToArticle(dto, rss);
 

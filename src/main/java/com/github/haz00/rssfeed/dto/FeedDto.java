@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class FeedDto implements Serializable {
@@ -16,7 +17,7 @@ public class FeedDto implements Serializable {
     public static FeedDto fromFeed(FeedPage feed) {
         List<ArticleDto> articlesDto = feed.getArticles().stream()
                 .map(ArticleDto::fromEntity)
-                .toList();
+                .collect(Collectors.toList());
 
         FeedDto feedDto = new FeedDto();
         feedDto.setArticles(articlesDto);

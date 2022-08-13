@@ -1,8 +1,10 @@
 # What is this?
 A simple Spring Boot driven proof-of-concept implementation of RSS client.
-It was made for educational and demonstration purposes:
+It was made for educational and demonstration purposes.
 
-It uses:
+Tested on RSS feed: https://lorem-rss.herokuapp.com/
+
+The project uses:
 - Spring MVC
 - Spring Data
 - Hibernate
@@ -10,8 +12,9 @@ It uses:
 - Scheduler
 - Async
 - Lombok
+- Maven
+- Javac target 1.8 (tested on jdk 17)
 
-Tested on RSS feed: https://lorem-rss.herokuapp.com/
 
 **REST end-points (arguments omitted)**:
 - GET `/api/rss`: list of all added rss feeds
