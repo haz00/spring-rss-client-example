@@ -2,10 +2,12 @@ package com.github.haz00.rssfeed;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.requireNonNull;
 
@@ -15,6 +17,12 @@ public class RssService {
 
     private RssRepository repository;
     private RssUpdater updater;
+
+    @Scheduled(fixedDelayString = "${rssUpdateSeconds}", timeUnit = TimeUnit.SECONDS)
+    public void rssScheduler() {
+        log.info("rss scheduler awake");
+        updateAllAsync();
+    }
 
     public Rss createByUrl(String url) {
         requireNonNull(url);
