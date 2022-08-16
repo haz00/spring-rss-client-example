@@ -25,7 +25,7 @@ The project uses:
 - GET `/api/feed`: fetch the feed page of all articles ordered chronologically
 
 **application.properties**:
-- `rssUpdateSeconds` - specify scheduler update rate 
+- `rssUpdateSeconds`: specify scheduler update rate 
 
 ## How to run
 - `git clone https://github.com/haz00/spring-rss-client-example.git`
